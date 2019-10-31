@@ -89,5 +89,9 @@ func Done(req *http.Request) ([]byte, error) {
 		return nil, err
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("get error status code: %v, resp: %s", resp.StatusCode, string(body))
+	}
+
 	return body, nil
 }
