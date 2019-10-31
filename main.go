@@ -44,16 +44,18 @@ func main() {
 
 			ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
 
-			select {
-			case <- ticker.C:
-				err := ChangeWallPaper(index)
-				if err != nil {
-					fmt.Println("change wallpaper get error:", err)
+			for {
+				select {
+				case <- ticker.C:
+					err := ChangeWallPaper(index)
+					if err != nil {
+						fmt.Println("change wallpaper get error:", err)
+					}
+				case <- ctx.Done():
+					fmt.Println("quiting...")
+					ticker.Stop()
+					return
 				}
-			case <- ctx.Done():
-				fmt.Println("quiting...")
-				ticker.Stop()
-				return
 			}
 		}(ctx, i)
 	}
