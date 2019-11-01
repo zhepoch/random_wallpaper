@@ -57,6 +57,12 @@ func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
 	if filePath[len(filePath) - 1] == '/' {
 		filePath = filePath[:len(filePath) - 1]
 	}
+
+	err = Mkdir(filePath)
+	if err != nil {
+		return "", err
+	}
+
 	fileName := fmt.Sprintf("%s/%s", filePath, photoInfo.Id)
 	err = ioutil.WriteFile(fileName, body, os.FileMode(0644))
 	if err != nil {
