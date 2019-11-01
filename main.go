@@ -33,27 +33,28 @@ func main() {
 	Init()
 
 	ctx, cancel := context.WithCancel(context.Background())
-	go func(ctx context.Context) {
-		ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
-		for {
-			select {
-			case <- ticker.C:
-				ChangeWallPaper()
-			case <- ctx.Done():
-				log.Println("Please ctrl+c to stop!")
-				ticker.Stop()
-				return
-			}
-		}
-	}(ctx)
+
+	go func(cancel context.CancelFunc) {
+		c := make(chan os.Signal)
+		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+		log.Println("Please ctrl+c to stop!")
+		<- c
+		cancel()
+	}(cancel)
 
 	go func() {
 		ChangeWallPaper()
 	}()
 
-	c := make(chan os.Signal)
-	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-	log.Println("Ctrl + C to exit....")
-	<- c
-	cancel()
+	ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
+	for {
+		select {
+		case <- ticker.C:
+			ChangeWallPaper()
+		case <- ctx.Done():
+			log.Println("quiting...")
+			ticker.Stop()
+			return
+		}
+	}
 }
