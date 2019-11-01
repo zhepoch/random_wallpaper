@@ -26,7 +26,7 @@ func ApplyWallpaper(picturePath string, desktopIndex int) error {
 	script := fmt.Sprintf(ApplyDesktopCommand, desktopIndex+1, picturePath)
 	_, err := OsaScript(script)
 	if err != nil {
-		log.Debugf("Apply wallpaper got error: %v\n", err)
+		log.Debugf("Apply wallpaper got error: %v", err)
 	}
 	return err
 }
@@ -37,7 +37,7 @@ func ChangeWallPaper() {
 
 	photoInfoList, err := GetRandomPhoto(desktopCount)
 	if err != nil {
-		log.Errorf("Get random photo got error: %v\n", err)
+		log.Errorf("Get random photo got error: %v", err)
 		return
 	}
 
@@ -52,14 +52,14 @@ func ChangeWallPaper() {
 			log.Debugln("work", index, "starting...")
 			photoPath, err := DownloadPhoto(photoInfoList[index])
 			if err != nil {
-				log.Errorf("Download photo error: %v\n", err)
+				log.Errorf("Download photo error: %v", err)
 				return
 			}
 
-			log.Infof("Get photo: %s\n", photoPath)
+			log.Infof("Get photo: %s", photoPath)
 			err = ApplyWallpaper(photoPath, index)
 			if err != nil {
-				log.Errorf("Apply wallpaper got error: %v\n", err)
+				log.Errorf("Apply wallpaper got error: %v", err)
 			}
 			log.Debugln("work", index, "finished.")
 		}(i)
