@@ -2,74 +2,58 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"github.com/spf13/pflag"
 	"os"
 	"os/signal"
-	"sync"
 	"syscall"
 	"time"
+
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/pflag"
 )
 
 var (
 	AccessKey = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
 	ReplaceTime = pflag.IntP("replace_time", "t", 5, "Change wallpaper every few minutes.")
 	FilePath = pflag.StringP("file_path", "p", "/tmp/random_wallpaper/", "save download wallpaper path.")
+	LogLevel = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
 )
+
+var (
+	log = logrus.New()
+)
+
+func Init() {
+	log.SetLevel(logrus.Level(*LogLevel))
+	log.Formatter = &logrus.TextFormatter{FullTimestamp: true}
+}
 
 func main() {
 	pflag.Parse()
 
-	err := Mkdir(*FilePath)
-	if err != nil {
-		panic(err)
-	}
+	Init()
 
 	ctx, cancel := context.WithCancel(context.Background())
-
-	desktopCount := GetDesktopCount()
-
-	var wg sync.WaitGroup
-	for i := 0; i < desktopCount; i++ {
-		wg.Add(1)
-		go func(ctx context.Context, index int) {
-			defer wg.Done()
-
-			fmt.Printf("work %d starting...\n", index)
-
-			err := ChangeWallPaper(index)
-			if err != nil {
-				fmt.Println("change wallpaper get error:", err)
+	go func(ctx context.Context) {
+		ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
+		for {
+			select {
+			case <- ticker.C:
+				ChangeWallPaper()
+			case <- ctx.Done():
+				log.Println("Please ctrl+c to stop!")
+				ticker.Stop()
+				return
 			}
+		}
+	}(ctx)
 
-			ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
+	go func() {
+		ChangeWallPaper()
+	}()
 
-			for {
-				select {
-				case <- ticker.C:
-					err := ChangeWallPaper(index)
-					if err != nil {
-						fmt.Println("change wallpaper get error:", err)
-					}
-				case <- ctx.Done():
-					fmt.Println("quiting...")
-					ticker.Stop()
-					return
-				}
-			}
-		}(ctx, i)
-	}
-
-	wg.Add(1)
-	go func(cancel context.CancelFunc) {
-		defer wg.Done()
-
-		c := make(chan os.Signal)
-		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-		fmt.Println("Ctrl + C to exit....")
-		<- c
-		cancel()
-	}(cancel)
-
-	wg.Wait()
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+	log.Println("Ctrl + C to exit....")
+	<- c
+	cancel()
 }

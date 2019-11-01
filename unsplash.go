@@ -23,26 +23,26 @@ type PhotoInfo struct {
 	Urls PhotoUrl `json:"urls"`
 }
 
-func GetRandomPhoto() (string, error) {
-	url := fmt.Sprintf("%s%s", UnsplashAPI, GetRandomPhotoAPI)
+func GetRandomPhoto(count int) ([]PhotoInfo, error) {
+	url := fmt.Sprintf("%s%s?count=%d", UnsplashAPI, GetRandomPhotoAPI, count)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	body, err := Done(req)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	var resp PhotoInfo
-	err = json.Unmarshal(body, &resp)
+	var pInfoList []PhotoInfo
+	err = json.Unmarshal(body, &pInfoList)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return DownloadPhoto(resp)
+	return pInfoList, nil
 }
 
 func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
@@ -63,7 +63,7 @@ func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
 		return "", err
 	}
 
-	fileName := fmt.Sprintf("%s/%s", filePath, photoInfo.Id)
+	fileName := fmt.Sprintf("%s/%s.jpg", filePath, photoInfo.Id)
 	err = ioutil.WriteFile(fileName, body, os.FileMode(0644))
 	if err != nil {
 		return "", err
