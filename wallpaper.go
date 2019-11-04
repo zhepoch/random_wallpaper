@@ -59,6 +59,7 @@ func ChangeWallPaper() {
 			log.Infof("Get photo: %s", photoPath)
 			err = ApplyWallpaper(photoPath, index)
 			if err != nil {
+				_ = RemoveFile(photoPath)
 				log.Errorf("Apply wallpaper got error: %v", err)
 			}
 			log.Debugln("work", index, "finished.")

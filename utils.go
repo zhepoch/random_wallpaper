@@ -41,3 +41,8 @@ func Mkdir(path string) error {
 	}
 	return nil
 }
+
+func RemoveFile(path string) error {
+	err := os.Remove(path)
+	return err
+}
