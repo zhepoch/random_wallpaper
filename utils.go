@@ -16,7 +16,6 @@ func Cmd(name string, args ...string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-
 func OsaScript(command string) (string, error) {
 	command = strings.TrimSpace(command)
 
@@ -27,7 +26,6 @@ func OsaScript(command string) (string, error) {
 
 	return out, nil
 }
-
 
 func Mkdir(path string) error {
 	_, err := os.Stat(path)

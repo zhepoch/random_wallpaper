@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	UnsplashAPI = "https://api.unsplash.com"
+	UnsplashAPI       = "https://api.unsplash.com"
 	GetRandomPhotoAPI = "/photos/random"
 )
 
@@ -19,7 +19,7 @@ type PhotoUrl struct {
 }
 
 type PhotoInfo struct {
-	Id string `json:"id"`
+	Id   string   `json:"id"`
 	Urls PhotoUrl `json:"urls"`
 }
 
@@ -54,8 +54,8 @@ func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
 	body, err := Done(req)
 
 	var filePath = *FilePath
-	if filePath[len(filePath) - 1] == '/' {
-		filePath = filePath[:len(filePath) - 1]
+	if filePath[len(filePath)-1] == '/' {
+		filePath = filePath[:len(filePath)-1]
 	}
 
 	err = Mkdir(filePath)

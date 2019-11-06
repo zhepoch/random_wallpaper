@@ -21,7 +21,6 @@ func GetDesktopCount() int {
 	return count
 }
 
-
 func ApplyWallpaper(picturePath string, desktopIndex int) error {
 	script := fmt.Sprintf(ApplyDesktopCommand, desktopIndex+1, picturePath)
 	_, err := OsaScript(script)
@@ -30,7 +29,6 @@ func ApplyWallpaper(picturePath string, desktopIndex int) error {
 	}
 	return err
 }
-
 
 func ChangeWallPaper() {
 	desktopCount := GetDesktopCount()
@@ -52,7 +50,6 @@ func ChangeWallPaper() {
 			log.Debugln("work", index, "starting...")
 			photoPath, err := DownloadPhoto(photoInfoList[index])
 			if err != nil {
-				log.Errorf("Download photo error: %v", err)
 				return
 			}
 

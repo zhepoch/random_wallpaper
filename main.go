@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	AccessKey = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
+	AccessKey   = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
 	ReplaceTime = pflag.IntP("replace_time", "t", 5, "Change wallpaper every few minutes.")
-	FilePath = pflag.StringP("file_path", "p", "/tmp/random_wallpaper/", "save download wallpaper path.")
-	LogLevel = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
+	FilePath    = pflag.StringP("file_path", "p", "/tmp/random_wallpaper/", "save download wallpaper path.")
+	LogLevel    = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
 )
 
 var (
@@ -38,7 +38,7 @@ func main() {
 		c := make(chan os.Signal)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 		log.Println("Please ctrl+c to stop!")
-		<- c
+		<-c
 		cancel()
 	}(cancel)
 
@@ -49,9 +49,9 @@ func main() {
 	ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
 	for {
 		select {
-		case <- ticker.C:
+		case <-ticker.C:
 			ChangeWallPaper()
-		case <- ctx.Done():
+		case <-ctx.Done():
 			log.Println("quiting...")
 			ticker.Stop()
 			return
