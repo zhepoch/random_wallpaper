@@ -27,6 +27,8 @@ func ApplyWallpaper(picturePath string, desktopIndex int) error {
 	if err != nil {
 		log.Debugf("Apply wallpaper got error: %v", err)
 	}
+
+	log.Debugln("run osasccript: ", script)
 	return err
 }
 
