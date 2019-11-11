@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"sync"
 )
@@ -44,7 +45,11 @@ func ChangeWallPaper() {
 	log.Debugln("got photo number:", len(photoInfoList))
 
 	var wg sync.WaitGroup
+	lastWallPaper = []string{}
 	for i := 0; i < len(photoInfoList); i++ {
+		lastWallPaper = append(lastWallPaper,
+			fmt.Sprintf("%s.jpg", photoInfoList[i].Id))
+
 		wg.Add(1)
 		go func(index int) {
 			defer wg.Done()
@@ -66,4 +71,34 @@ func ChangeWallPaper() {
 	}
 
 	wg.Wait()
+}
+
+func RemoveExtraFile() {
+	dir, err := os.Open(*FilePath)
+	if err != nil {
+		log.Errorf("open file, got error: %v", err)
+		return
+	}
+
+	fileInfoList, err := dir.Readdir(-1)
+	_ = dir.Close()
+	if err != nil {
+		log.Errorf("read dir, got error: %v", err)
+		return
+	}
+
+	for _, fileInfo := range fileInfoList {
+		if fileInfo.IsDir() {
+			if err := os.RemoveAll(fmt.Sprintf("%s/%s", *FilePath, fileInfo.Name())); err != nil {
+				log.Errorf("remove dir error: %v", err)
+			}
+		} else {
+			if !Contains(fileInfo.Name(), lastWallPaper) {
+				if err := os.Remove(fmt.Sprintf("%s/%s", *FilePath, fileInfo.Name())); err != nil {
+					log.Errorf("remove file error: %v", err)
+				}
+			}
+		}
+	}
+	return
 }

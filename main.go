@@ -19,7 +19,8 @@ var (
 )
 
 var (
-	log = logrus.New()
+	lastWallPaper []string
+	log           = logrus.New()
 )
 
 func Init() {
@@ -44,16 +45,31 @@ func main() {
 
 	go func() {
 		ChangeWallPaper()
+		RemoveExtraFile()
 	}()
 
-	ticker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
+	removeExtraFileTicker := time.NewTicker(time.Hour * 5)
+	go func(ctx context.Context) {
+		for {
+			select {
+			case <-removeExtraFileTicker.C:
+				RemoveExtraFile()
+			case <-ctx.Done():
+				log.Println("remove extra file work quiting...")
+				removeExtraFileTicker.Stop()
+				return
+			}
+		}
+	}(ctx)
+
+	changeWallPaperTicker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
 	for {
 		select {
-		case <-ticker.C:
+		case <-changeWallPaperTicker.C:
 			ChangeWallPaper()
 		case <-ctx.Done():
-			log.Println("quiting...")
-			ticker.Stop()
+			log.Println("change wallPaper work quiting...")
+			changeWallPaperTicker.Stop()
 			return
 		}
 	}

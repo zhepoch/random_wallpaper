@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"os/exec"
+	"reflect"
 	"strings"
 )
 
@@ -43,4 +44,17 @@ func Mkdir(path string) error {
 func RemoveFile(path string) error {
 	err := os.Remove(path)
 	return err
+}
+
+func Contains(val interface{}, arr interface{}) bool {
+	switch reflect.TypeOf(arr).Kind() {
+	case reflect.Slice:
+		s := arr.([]string)
+		for _, item := range s {
+			if reflect.DeepEqual(val, item) {
+				return true
+			}
+		}
+	}
+	return false
 }
