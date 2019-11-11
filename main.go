@@ -53,6 +53,7 @@ func main() {
 		for {
 			select {
 			case <-removeExtraFileTicker.C:
+				log.Println("strating remove extra...")
 				RemoveExtraFile()
 			case <-ctx.Done():
 				log.Println("remove extra file work quiting...")
