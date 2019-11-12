@@ -52,6 +52,9 @@ func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
 	}
 
 	body, err := Done(req)
+	if err != nil {
+		return "", err
+	}
 
 	var filePath = *FilePath
 	if filePath[len(filePath)-1] == '/' {
