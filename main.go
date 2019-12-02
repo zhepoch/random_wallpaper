@@ -12,10 +12,11 @@ import (
 )
 
 var (
-	AccessKey   = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
-	ReplaceTime = pflag.IntP("replace_time", "t", 5, "Change wallpaper every few minutes.")
-	FilePath    = pflag.StringP("file_path", "p", "/tmp/random_wallpaper/", "save download wallpaper path.")
-	LogLevel    = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
+	AccessKey     = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
+	ReplaceTime   = pflag.IntP("replace_time", "t", 5, "Change wallpaper every few minutes.")
+	FilePath      = pflag.StringP("file_path", "p", "/tmp/random_wallpaper/", "save download wallpaper path.")
+	LogLevel      = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
+	PhotoQueryKey = pflag.StringP("phtot_query_key", "q", "", "Limit selection to photos matching a search term.")
 )
 
 var (
@@ -44,7 +45,7 @@ func main() {
 	}(cancel)
 
 	go func() {
-		ChangeWallPaper()
+		ChangeWallPaper(*PhotoQueryKey)
 		RemoveExtraFile()
 	}()
 
@@ -67,7 +68,7 @@ func main() {
 	for {
 		select {
 		case <-changeWallPaperTicker.C:
-			ChangeWallPaper()
+			ChangeWallPaper(*PhotoQueryKey)
 		case <-ctx.Done():
 			log.Println("change wallPaper work quiting...")
 			changeWallPaperTicker.Stop()
