@@ -23,11 +23,11 @@ type PhotoInfo struct {
 	Urls PhotoUrl `json:"urls"`
 }
 
-func GetRandomPhoto(count int, photoQueryKey string) ([]PhotoInfo, error) {
+func GetRandomPhoto(count int) ([]PhotoInfo, error) {
 	url := fmt.Sprintf("%s%s?count=%d", UnsplashAPI, GetRandomPhotoAPI, count)
 
-	if photoQueryKey != "" {
-		url = fmt.Sprintf("%s&query=%s", url, photoQueryKey)
+	if *PhotoQueryKey != "" {
+		url = fmt.Sprintf("%s&query=%s", url, *photoQueryKey)
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)

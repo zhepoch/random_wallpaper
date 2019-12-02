@@ -45,7 +45,7 @@ func main() {
 	}(cancel)
 
 	go func() {
-		ChangeWallPaper(*PhotoQueryKey)
+		ChangeWallPaper()
 		RemoveExtraFile()
 	}()
 
@@ -68,7 +68,7 @@ func main() {
 	for {
 		select {
 		case <-changeWallPaperTicker.C:
-			ChangeWallPaper(*PhotoQueryKey)
+			ChangeWallPaper()
 		case <-ctx.Done():
 			log.Println("change wallPaper work quiting...")
 			changeWallPaperTicker.Stop()

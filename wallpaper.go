@@ -33,10 +33,10 @@ func ApplyWallpaper(picturePath string, desktopIndex int) error {
 	return err
 }
 
-func ChangeWallPaper(photoQueryKey string) {
+func ChangeWallPaper() {
 	desktopCount := GetDesktopCount()
 
-	photoInfoList, err := GetRandomPhoto(desktopCount, photoQueryKey)
+	photoInfoList, err := GetRandomPhoto(desktopCount)
 	if err != nil {
 		log.Errorf("Get random photo got error: %v", err)
 		return
