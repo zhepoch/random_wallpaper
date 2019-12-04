@@ -14,14 +14,16 @@ import (
 var (
 	AccessKey     = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
 	ReplaceTime   = pflag.IntP("replace_time", "t", 5, "Change wallpaper every few minutes.")
-	FilePath      = pflag.StringP("file_path", "p", "/tmp/random_wallpaper/", "save download wallpaper path.")
+	FilePath      = pflag.StringP("file_path", "f", "/tmp/random_wallpaper/", "save download wallpaper path.")
 	LogLevel      = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
 	PhotoQueryKey = pflag.StringP("photo_query_key", "q", "", "Limit selection to photos matching a search term.")
+	ListenPort    = pflag.IntP("listen_port", "p", 16606, "change get unsplash query key http server listen port.")
 )
 
 var (
 	lastWallPaper []string
 	log           = logrus.New()
+	initiativeChange = make(chan struct{}, 1)
 )
 
 func Init() {
@@ -54,23 +56,31 @@ func main() {
 		for {
 			select {
 			case <-removeExtraFileTicker.C:
-				log.Println("strating remove extra...")
+				log.Println("Starting remove extra...")
 				RemoveExtraFile()
 			case <-ctx.Done():
-				log.Println("remove extra file work quiting...")
+				log.Println("Remove extra file work quiting...")
 				removeExtraFileTicker.Stop()
 				return
 			}
 		}
 	}(ctx)
 
+	go func() {
+		log.Println("Starting listen addr: 127.0.0.1", *ListenPort)
+		log.Errorln(ListenHttpServer())
+	}()
+
 	changeWallPaperTicker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
 	for {
 		select {
+		case <- initiativeChange:
+			log.Println("Initiative Change Wallpaper...")
+			ChangeWallPaper()
 		case <-changeWallPaperTicker.C:
 			ChangeWallPaper()
 		case <-ctx.Done():
-			log.Println("change wallPaper work quiting...")
+			log.Println("Change wallPaper work quiting...")
 			changeWallPaperTicker.Stop()
 			return
 		}

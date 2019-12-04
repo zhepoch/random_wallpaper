@@ -27,7 +27,7 @@ func GetRandomPhoto(count int) ([]PhotoInfo, error) {
 	url := fmt.Sprintf("%s%s?count=%d", UnsplashAPI, GetRandomPhotoAPI, count)
 
 	if *PhotoQueryKey != "" {
-		url = fmt.Sprintf("%s&query=%s", url, *photoQueryKey)
+		url = fmt.Sprintf("%s&query=%s", url, *PhotoQueryKey)
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
