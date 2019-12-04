@@ -33,8 +33,32 @@ func ApplyWallpaper(picturePath string, desktopIndex int) error {
 	return err
 }
 
+func generateCachedWallpaper(lastWallPaper []string, desktopCount int) []string {
+	var cachedWallpaperLength int
+	var copyLength int
+	if desktopCount >= len(lastWallPaper) {
+		cachedWallpaperLength = desktopCount
+		copyLength = len(lastWallPaper)
+	} else {
+		cachedWallpaperLength = len(lastWallPaper)
+		copyLength = desktopCount
+	}
+
+	newLastWallPaper := make([]string, cachedWallpaperLength)
+	for i := 0; i < copyLength; i++ {
+		newLastWallPaper = append(newLastWallPaper, lastWallPaper[i])
+	}
+
+	return newLastWallPaper
+}
+
 func ChangeWallPaper() {
 	desktopCount := GetDesktopCount()
+
+	if desktopCount == 0 {
+		log.Debugf("Get Desktop Count is zero... early closure change wallpaper")
+		return
+	}
 
 	photoInfoList, err := GetRandomPhoto(desktopCount)
 	if err != nil {
@@ -43,13 +67,11 @@ func ChangeWallPaper() {
 	}
 
 	log.Debugln("got photo number:", len(photoInfoList))
+	newLastWallPaper := generateCachedWallpaper(lastWallPaper, desktopCount)
 
 	var wg sync.WaitGroup
-	lastWallPaper = []string{}
 	for i := 0; i < len(photoInfoList); i++ {
-		lastWallPaper = append(lastWallPaper,
-			fmt.Sprintf("%s.jpg", photoInfoList[i].Id))
-
+		newLastWallPaper[i] = fmt.Sprintf("%s.jpg", photoInfoList[i].Id)
 		wg.Add(1)
 		go func(index int) {
 			defer wg.Done()
