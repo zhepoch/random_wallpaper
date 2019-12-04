@@ -30,6 +30,7 @@ func GetRandomPhoto(count int) ([]PhotoInfo, error) {
 		url = fmt.Sprintf("%s&query=%s", url, *PhotoQueryKey)
 	}
 
+	log.Debugf("Get Random Wallpaper Url: %s", url)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
