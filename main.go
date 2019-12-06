@@ -47,8 +47,8 @@ func main() {
 	}(cancel)
 
 	go func() {
-		ChangeWallPaper()
 		RemoveExtraFile()
+		ChangeWallPaper()
 	}()
 
 	removeExtraFileTicker := time.NewTicker(time.Hour * 5)
