@@ -43,10 +43,13 @@ func ChangeQueryKeyHandler(w http.ResponseWriter, r *http.Request) {
 
 	value := r.FormValue("key")
 	log.Infoln("POST: /change_query_key,", r.Form.Encode())
-	if value != "" {
-		encodeKey := url.QueryEscape(value)
-		*PhotoQueryKey = encodeKey
-	}
+	//if value != "" {
+	//	encodeKey := url.QueryEscape(value)
+	//	*PhotoQueryKey = encodeKey
+	//}
+
+	encodeKey := url.QueryEscape(value)
+	*PhotoQueryKey = encodeKey
 
 	initiativeChange <- struct{}{}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
