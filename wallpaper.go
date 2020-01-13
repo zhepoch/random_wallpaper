@@ -96,6 +96,10 @@ func ChangeWallPaper() {
 }
 
 func RemoveExtraFile() {
+	if _, err := os.Stat(*FilePath); os.IsNotExist(err) {
+		return
+	}
+
 	dir, err := os.Open(*FilePath)
 	if err != nil {
 		log.Errorf("open file, got error: %v", err)
