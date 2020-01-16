@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-const ChangeQueryKeyHtml  = `
+const ChangeQueryKeyHtml = `
 <!DOCTYPE html>
 <html lang="en">
 <head>

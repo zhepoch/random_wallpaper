@@ -23,7 +23,7 @@ var (
 var (
 	lastWallPaper []string
 	log           = logrus.New()
-	UserChange = make(chan struct{}, 1)
+	UserChange    = make(chan struct{}, 1)
 )
 
 func Init() {
@@ -74,11 +74,11 @@ func main() {
 	changeWallPaperTicker := time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
 	for {
 		select {
-		case <- UserChange:
+		case <-UserChange:
 			log.Println("Initiative Change Wallpaper...")
 			ChangeWallPaper()
-            changeWallPaperTicker.Stop()
-            changeWallPaperTicker = time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
+			changeWallPaperTicker.Stop()
+			changeWallPaperTicker = time.NewTicker(time.Minute * time.Duration(*ReplaceTime))
 		case <-changeWallPaperTicker.C:
 			ChangeWallPaper()
 		case <-ctx.Done():
