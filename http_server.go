@@ -51,7 +51,7 @@ func ChangeQueryKeyHandler(w http.ResponseWriter, r *http.Request) {
 	encodeKey := url.QueryEscape(value)
 	*PhotoQueryKey = encodeKey
 
-	initiativeChange <- struct{}{}
+	UserChange <- struct{}{}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte("Update Success: "))
