@@ -51,6 +51,7 @@ func GetRandomPhoto(count int) ([]PhotoInfo, error) {
 }
 
 func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
+	log.Debugf("Get Wallpaper Url: %s", photoInfo.Urls.Full)
 	req, err := http.NewRequest(http.MethodGet, photoInfo.Urls.Full, nil)
 	if err != nil {
 		return "", err
