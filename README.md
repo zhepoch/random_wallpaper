@@ -5,13 +5,13 @@
 + backend clean extra download wallpaper
 
 ## To use
-+ Registe a [Unsplash](https://unsplash.com/developers) develpoer account
++ Register a [Unsplash](https://unsplash.com/developers) developer account
 + Create you application, and get this access_key.
 + Download this repository,and build `go build -o /usr/local/bin .`
 + Run this command: `random_wallpaper -a your_access_key`
 
 ## To runtime change wallpaper style
-> open brower: `http:://127.0.0.1:16606`, change wallpaper style
+> open browser: `http:://127.0.0.1:16606`, change wallpaper style
 
 ## Support Parameters
 | shorthand | longhand | type | usage |
