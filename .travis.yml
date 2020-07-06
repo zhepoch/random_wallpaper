@@ -1,0 +1,15 @@
+# Disable sudo to speed up the build
+sudo: false
+
+# Set the build language to Python
+language: golang
+
+# Set the golang version to 1,11
+golang:
+    - "1.11"
+
+install:
+    go get ./...
+
+script:
+    - go build .
