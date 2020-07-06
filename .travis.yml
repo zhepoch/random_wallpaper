@@ -8,6 +8,8 @@ language: golang
 golang:
     - "1.11"
 
-script:
+install:
     go get ./...
-    go build .
+
+script:
+    - go build .
