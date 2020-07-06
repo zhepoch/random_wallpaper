@@ -1,4 +1,6 @@
-# macOS random wallpaper
+# macOS random wallpaper 
+
+[![Build Status](https://travis-ci.com/zhepoch/random_wallpaper.svg?branch=master)](https://travis-ci.com/zhepoch/random_wallpaper)
 
 ## Features
 + runtime change wallpaper style
