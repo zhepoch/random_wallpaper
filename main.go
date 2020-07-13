@@ -14,10 +14,11 @@ import (
 var (
 	AccessKey     = pflag.StringP("access_key", "a", "", "Access key of unsplash.")
 	ReplaceTime   = pflag.IntP("replace_time", "t", 5, "Change wallpaper every few minutes.")
-	FilePath      = pflag.StringP("file_path", "f", "/tmp/random_wallpaper/", "save download wallpaper path.")
-	LogLevel      = pflag.UintP("log_level", "v", 4, "debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug")
+	FilePath      = pflag.StringP("file_path", "f", "/tmp/random_wallpaper/", "Save download wallpaper path.")
+	LogLevel      = pflag.UintP("log_level", "v", 4, "Debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug.")
+	ProxyString   = pflag.StringP("proxy_url", "p", "", "Used in proxy to request unsplash API.")
 	PhotoQueryKey = pflag.StringP("photo_query_key", "q", "", "Limit selection to photos matching a search term.")
-	ListenPort    = pflag.IntP("listen_port", "p", 16606, "change get unsplash query key http server listen port.")
+	ListenPort    = pflag.IntP("listen_port", "l", 16606, "Change get unsplash query key http server listen port.")
 )
 
 var (

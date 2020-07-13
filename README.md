@@ -4,7 +4,7 @@
 
 ## Features
 + runtime change wallpaper style
-+ backend clean extra download wallpaper
++ backend clears extra download wallpaper
 
 ## To use
 + Register a [Unsplash](https://unsplash.com/developers) developer account
@@ -20,10 +20,11 @@
 | --------- |:-------- | ---- | ----- |
 | -a        | --access_key | string | Access key of unsplash. |
 | -f        | --file_path | string | save download wallpaper path. (default "/tmp/random_wallpaper/"). |
-| -p        | --listen_port | int | change get unsplash query key http server listen port. (default 16606). |
+| -l        | --listen_port | int | change get unsplash query key http server listen port. (default 16606). |
 | -v        | --log_level | uint | debug level 0-5, 0:panic, 1:Fatal, 2:Error, 3:Warn, 4:Info 5:debug (default 4). |
 | -q        | --photo_query_key | string | Limit selection to photos matching a search term. |
 | -t        | --replace_time | int | Change wallpaper every few minutes. (default 5). |
+| -p        | --proxy_url | string | Used in proxy to request unsplash API. |
 
 ## And
 ... Nothing ...

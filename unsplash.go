@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 )
@@ -24,14 +25,14 @@ type PhotoInfo struct {
 }
 
 func GetRandomPhoto(count int) ([]PhotoInfo, error) {
-	url := fmt.Sprintf("%s%s?count=%d", UnsplashAPI, GetRandomPhotoAPI, count)
+	_url := fmt.Sprintf("%s%s?count=%d", UnsplashAPI, GetRandomPhotoAPI, count)
 
 	if *PhotoQueryKey != "" {
-		url = fmt.Sprintf("%s&query=%s", url, *PhotoQueryKey)
+		_url = fmt.Sprintf("%s&query=%s", _url, *PhotoQueryKey)
 	}
 
-	log.Debugf("Get Random Wallpaper Url: %s", url)
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	log.Debugf("Get Random Wallpaper Url: %s", _url)
+	req, err := http.NewRequest(http.MethodGet, _url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -83,12 +84,20 @@ func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
 
 func Done(req *http.Request) ([]byte, error) {
 	req.Header.Set("Authorization", fmt.Sprintf("Client-ID %s", *AccessKey))
-
 	tr := &http.Transport{
 		MaxIdleConns:       10,
 		IdleConnTimeout:    30 * time.Second,
 		DisableCompression: true,
 	}
+
+	// To check proxy setting
+	if *ProxyString != "" {
+		proxyUrl, err := url.Parse(*ProxyString)
+		if err == nil {
+			tr.Proxy = http.ProxyURL(proxyUrl)
+		}
+	}
+
 	client := &http.Client{Transport: tr}
 
 	resp, err := client.Do(req)
