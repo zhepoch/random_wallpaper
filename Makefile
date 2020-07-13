@@ -25,7 +25,7 @@ help:
 	@echo "make gotool - run go tool 'fmt' and 'vet'"
 	@echo "make install - to install into local machine"
 install:
-	cp bin/random_wallpaper /usr/local/random_wallpaper
+	cp bin/random_wallpaper /usr/local/bin/random_wallpaper
 ci-test:
 	./bin/random_wallpaper --version
 
