@@ -50,6 +50,9 @@ func ChangeQueryKeyHandler(w http.ResponseWriter, r *http.Request) {
 
 	encodeKey := url.QueryEscape(value)
 	*PhotoQueryKey = encodeKey
+	if err := SavePhotoQueryKey(encodeKey); err != nil {
+		log.Errorf("Save Query key to file got error: %v", err)
+	}
 
 	UserChange <- struct{}{}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")

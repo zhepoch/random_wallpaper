@@ -51,6 +51,23 @@ func main() {
 
 	Init()
 
+	if *PhotoQueryKey == "" {
+		key, err := ReadPhotoQueryKey()
+		log.Debugf("ReadPhotoQueryKey: %v, %v\n", key, err)
+		if err != nil {
+			log.Errorf("Read Query key from file got error: %v\n", err)
+		} else {
+			*PhotoQueryKey = key
+		}
+	} else {
+		err := SavePhotoQueryKey(*PhotoQueryKey)
+		if err != nil {
+			log.Errorf("Save Query key to file got error: %v", err)
+		}
+	}
+
+	log.Infof("QueryKey: %s", *PhotoQueryKey)
+
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func(cancel context.CancelFunc) {

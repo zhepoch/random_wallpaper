@@ -27,6 +27,7 @@ help:
 install:
 	cp bin/random_wallpaper /usr/local/bin/random_wallpaper
 ci-test:
+	go test .
 	./bin/random_wallpaper --version
 
 .PHONY: clean gotool install help ci-test
