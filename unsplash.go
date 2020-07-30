@@ -8,6 +8,8 @@ import (
 	"net/url"
 	"os"
 	"time"
+
+	"bitbucket.org/zhepoch/utilGo/fileUtil"
 )
 
 var (
@@ -68,7 +70,7 @@ func DownloadPhoto(photoInfo PhotoInfo) (string, error) {
 		filePath = filePath[:len(filePath)-1]
 	}
 
-	err = Mkdir(filePath)
+	err = fileUtil.Mkdir(filePath)
 	if err != nil {
 		return "", err
 	}

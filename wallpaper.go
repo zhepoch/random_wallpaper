@@ -5,6 +5,9 @@ import (
 	"os"
 	"strconv"
 	"sync"
+
+	"bitbucket.org/zhepoch/utilGo"
+	"bitbucket.org/zhepoch/utilGo/fileUtil"
 )
 
 func GetDesktopCount() int {
@@ -85,7 +88,7 @@ func ChangeWallPaper() {
 			log.Infof("Get photo: %s", photoPath)
 			err = ApplyWallpaper(photoPath, index)
 			if err != nil {
-				_ = RemoveFile(photoPath)
+				_ = fileUtil.RemoveFile(photoPath)
 				log.Errorf("Apply wallpaper got error: %v", err)
 			}
 			log.Debugln("work", index, "finished.")
@@ -119,7 +122,7 @@ func RemoveExtraFile() {
 				log.Errorf("remove dir error: %v", err)
 			}
 		} else {
-			if !Contains(fileInfo.Name(), lastWallPaper) {
+			if !utilGo.Contains(fileInfo.Name(), lastWallPaper) {
 				if err := os.Remove(fmt.Sprintf("%s/%s", *FilePath, fileInfo.Name())); err != nil {
 					log.Errorf("remove file error: %v", err)
 				}

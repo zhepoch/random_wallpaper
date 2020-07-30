@@ -9,7 +9,7 @@ golang:
     - "1.11"
 
 install:
-    go get ./...
+    go get -d  -u ./...
 
 script:
     - make && make ci-test
