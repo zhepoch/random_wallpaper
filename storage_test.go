@@ -11,9 +11,13 @@ func TestReadPhotoQueryKey(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = os.Remove(filepath.Join(hostDir, ".rwallpaper", "config"))
-	if err != nil {
-		t.Fatal(err)
+
+	saveConfigPath := filepath.Join(hostDir, ".rwallpaper", "config")
+	if _, err := os.Stat(saveConfigPath); os.IsExist(err) {
+		err = os.Remove(filepath.Join(hostDir, ".rwallpaper", "config"))
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	key, err := ReadPhotoQueryKey()
