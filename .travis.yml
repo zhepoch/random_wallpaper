@@ -2,10 +2,10 @@
 sudo: false
 
 # Set the build language to Python
-language: golang
+language: go
 
-# Set the golang version to 1,11
-golang:
+# Set the golang version to 1.12 and 1.13
+go:
     - "1.12"
     - "1.13"
 
