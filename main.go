@@ -71,7 +71,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func(cancel context.CancelFunc) {
-		c := make(chan os.Signal)
+		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 		log.Println("Please ctrl+c to stop!")
 		<-c
