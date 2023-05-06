@@ -1,46 +1,42 @@
 package main
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"bitbucket.org/zhepoch/utilGo/fileUtil"
 )
 
-func SavePhotoQueryKey(key string) error {
-	log.Debugf("Save photo query key to file: %v", key)
+func getConfigPath() (string, error) {
 	homePath, err := os.UserHomeDir()
 	if err != nil {
-		return err
+		return "", err
 	}
-	file, err := fileUtil.OpenFile(filepath.Join(homePath, ".rwallpaper", "config"), os.O_CREATE|os.O_RDWR, 0644)
+	configPath := filepath.Join(homePath, ".rwallpaper", "config")
+	return configPath, nil
+}
+
+func SavePhotoQueryKey(key string) error {
+	log.Debugf("Save photo query key to file: %v", key)
+	configPath, err := getConfigPath()
+	file, err := fileUtil.OpenFile(configPath, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		_ = file.Close()
 	}()
-
 	_, err = file.WriteString(key)
 	return err
 }
 
 func ReadPhotoQueryKey() (key string, err error) {
-	homePath, err := os.UserHomeDir()
+	configPath, err := getConfigPath()
 	if err != nil {
 		return "", err
 	}
 
-	file, err := fileUtil.OpenFile(filepath.Join(homePath, ".rwallpaper", "config"), os.O_RDONLY, 0644)
-	if err != nil {
-		return "", err
-	}
-
-	buffer := make([]byte, 128)
-	n, err := file.Read(buffer)
-	if err != nil {
-		return "", err
-	}
-
-	return string(buffer[:n]), nil
+	fileBody, err := ioutil.ReadFile(configPath)
+	return string(fileBody), err
 }

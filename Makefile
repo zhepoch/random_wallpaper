@@ -11,12 +11,12 @@ gitTreeState = $(shell if git status|grep -q 'clean'; then echo clean; else echo
 ldflags="-w -X ${versionDir}.gitTag=${gitTag} -X ${versionDir}.buildDate=${buildDate} -X ${versionDir}.gitCommit=${gitCommit} -X ${versionDir}.gitTreeState=${gitTreeState}"
 
 
-all: gotool
+all:
 	@go build -v -o bin/random_wallpaper -ldflags ${ldflags} -gcflags=-trimpath=${BASEDIR} -asmflags=-trimpath=${BASEDIR}.
 clean:
 	rm -f bin/random_wallpaper
 	find . -name "[._]*.s[a-w][a-z]" | xargs rm -f {}
-gotool:
+fmt:
 	gofmt -w .
 	go vet . | grep -v vendor;true
 help:
