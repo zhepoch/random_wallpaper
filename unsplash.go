@@ -27,7 +27,7 @@ type PhotoInfo struct {
 }
 
 func GetRandomPhoto(count int) ([]PhotoInfo, error) {
-	_url := fmt.Sprintf("%s%s?count=%d", UnsplashAPI, GetRandomPhotoAPI, count)
+	_url := fmt.Sprintf("%s%s?count=%d&orientation=landscape&content_filter=high", UnsplashAPI, GetRandomPhotoAPI, count)
 
 	if *PhotoQueryKey != "" {
 		_url = fmt.Sprintf("%s&query=%s", _url, *PhotoQueryKey)
